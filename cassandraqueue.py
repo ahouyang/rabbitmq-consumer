@@ -1,7 +1,8 @@
 import pika
 import sys
 import json
-import pymongo
+import base64
+from cassandra.cluster import Cluster
 
 # myclient = pymongo.MongoClient('mongodb://130.245.170.88:27017/')
 # mydb = myclient['finalproject']
@@ -9,14 +10,14 @@ import pymongo
 # questions = mydb['questions']
 # answers = mydb['answers']
 
-cluster = Cluster(['130.245.171.50'])
+cluster = Cluster(['192.168.122.21'])
 session = cluster.connect(keyspace='stackoverflow')
 
 def callback(ch, method, properties, body):
     body = body.decode('utf-8')
     info = body.split(',')
     media_id = info[0]
-    b = bytearray(info[1])
+    b = bytearray(base64.b64decode(info[1]))
     filetype = info[2]
     added = True if info[3] == 'True' else False
     username = info[4]
