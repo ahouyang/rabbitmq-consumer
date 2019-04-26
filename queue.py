@@ -8,6 +8,7 @@ mydb = myclient['finalproject']
 users = mydb['users']
 questions = mydb['questions']
 answers = mydb['answers']
+media = mydb['media']
 
 def callback(ch, method, properties, body):
     body = body.decode('utf-8')
@@ -19,6 +20,8 @@ def callback(ch, method, properties, body):
         collection = users
     elif doc['collection'] == 'answers':
         collection = answers
+    elif doc['collection'] == 'media':
+        collection = media
     collection.insert_one(doc)
     print("got message: " + str(doc), sys.stderr)
     ch.basic_ack(delivery_tag=method.delivery_tag)

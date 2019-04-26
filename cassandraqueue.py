@@ -18,11 +18,8 @@ def callback(ch, method, properties, body):
     info = body.split(',')
     media_id = info[0]
     b = bytearray(base64.b64decode(info[1]))
-    filetype = info[2]
-    added = True if info[3] == 'True' else False
-    username = info[4]
-    cqlinsert = 'insert into media (id, content, type, added, poster) values (%s, %s, %s, %s, %s);'
-    session.execute(cqlinsert, (media_id, b, filetype, added, username))
+    cqlinsert = 'insert into media (id, content) values (%s, %s);'
+    session.execute(cqlinsert, (media_id, b))
     # session.execute(body)
     # doc = json.loads(body)
     # collection = None
