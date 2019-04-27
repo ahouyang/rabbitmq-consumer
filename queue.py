@@ -22,7 +22,10 @@ def callback(ch, method, properties, body):
         collection = answers
     elif doc['collection'] == 'media':
         collection = media
-    collection.insert_one(doc)
+    if doc['action'] == 'insert':
+        collection.insert_one(doc)
+    elif doc['action'] == 'update':
+        collection.update_many(doc['filter'], doc['update'])
     print("got message: " + str(doc), sys.stderr)
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
